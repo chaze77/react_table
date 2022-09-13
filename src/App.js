@@ -1,13 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import List from "./components/List/List";
 import "./index.css";
 
 const App = () => {
   const [article, setArticle] = useState([]);
-  // const [status, setStatus] = useState("");
-  // const [species, setSpecies] = useState("");
-  // const [url, setUrl] = useState("");
+  const [flag, setFlag] = useState("");
 
   const API = "https://rickandmortyapi.com/api/character";
 
@@ -18,22 +15,15 @@ const App = () => {
     });
   }, []);
 
-  let status = "";
-  let species ="";
-  let url = "";
-
   const getStatus = () => {
-    status = article.map((item) => item.status);
-    console.log(status);
+    setFlag("status");
   };
   const getSpecies = () => {
-    species =  article.map((item) => item.species);
+    setFlag("species");
   };
   const getUrl = () => {
-    url = article.map((item) => item.url);
+    setFlag("url");
   };
-
-  
 
   return (
     <div>
@@ -49,21 +39,31 @@ const App = () => {
             <th>Dynamic</th>
           </tr>
         </thead>
-        
-            <tbody >
-            {article.map((item) => {
-          return (
+
+        <tbody>
+          {article.map((item) => {
+            return (
               <tr key={item.id}>
                 <td>{item.gender}</td>
-                <td>{item.name}</td>    
-                <td>{item.status}</td>
-                <td>{item.species}</td>
-                <td>{item.url}</td>
+                <td>{item.name}</td>
+                {(() => {
+                  switch (flag) {
+                    case "status":
+                      return <td>{item.status}</td>;
+
+                    case "species":
+                      return <td>{item.species}</td>;
+
+                    case "url":
+                      return <td>{item.url}</td>;
+                    default:
+                      return <td></td>;
+                  }
+                })()}
               </tr>
-               );
-              })}
-            </tbody>
-         
+            );
+          })}
+        </tbody>
       </table>
     </div>
   );
